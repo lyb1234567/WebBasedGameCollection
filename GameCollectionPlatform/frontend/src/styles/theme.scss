@@ -1,0 +1,12 @@
+
+$primary: #95bf9b;
+$secondary: #a39f60;
+$dark: #0e0e0e;
+
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "dark":       $dark
+);
+
+@import "bootstrap";
