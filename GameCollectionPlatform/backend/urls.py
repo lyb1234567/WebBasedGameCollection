@@ -18,6 +18,7 @@ from django.urls import include, path ,re_path
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
+from customUser import views as userViews
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('api/', include('loginRegister.urls')),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
+    path('api/v1/user/update/',userViews.updateUser.as_view())
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 import {createStore} from 'vuex'
-
+import createPersistedState from "vuex-persistedstate";
 export default createStore({
 
     state: {
@@ -14,11 +14,13 @@ export default createStore({
                 state.token = localStorage.getItem('token')
                 state.username = localStorage.getItem('username')
                 state.isAuthenticated = true;
+                // console.log("Username "+state.username + " Token "+state.token)  
             }
             else{
                 state.token = ''
                 state.username = ''
                 state.isAuthenticated = false;
+                // console.log("Resetting Username "+state.username + " Token "+state.token)
             }
         },
         setToken(state, token, username)
@@ -39,7 +41,8 @@ export default createStore({
     },
     modules: {
 
-    }
+    },
+    plugins: [createPersistedState()]
 
 
 })
