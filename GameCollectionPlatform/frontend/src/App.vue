@@ -68,6 +68,7 @@
     <router-link to="/"></router-link>
     <router-link to="/register"></router-link>
   </div>
+  <router-view />
 </template>
 
 <script>
