@@ -63,6 +63,11 @@ INSTALLED_APPS = [
     "djoser", 
     "corsheaders",
     "customUser",
+    "Game",
+    "Collection",
+    "Community",
+    "Review",
+    "GamePublisher",
     "allauth",
     "allauth.account"
 ]
