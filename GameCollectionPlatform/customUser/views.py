@@ -12,7 +12,6 @@ class updateUser(APIView):
     - Assign celery task to Seperate Audio
     - Return celery task_id in response
     """
-
     def post(self, request):
         username = request.data['username']
         data = User.objects.get(username=username)
