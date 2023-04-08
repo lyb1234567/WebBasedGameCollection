@@ -5,12 +5,14 @@ from django.core.exceptions import ValidationError
 import re 
 class PublisherManager(models.Manager):
     
-    def is_password_complex(password):
+    def is_password_complex(self,password):
         if len(password) < 8:
             return False
         if not re.search(r'[A-Z]', password):
             return False
         if not re.search(r'[a-z]', password):
+            return False
+        if not re.search(r'[0-9]', password):
             return False
         if not re.search(r'\d', password):
             return False
@@ -18,15 +20,12 @@ class PublisherManager(models.Manager):
             return False
         return True
     
-
-
     def create(self, pubPassword, pubEmail, profilePicture=None, publisherDescription='', publisherInfo=''):
         try:
             validate_email(pubEmail)
         except ValidationError:
             raise ValueError("Invalid email address")
         
-
         if not self.is_password_complex(pubPassword):
                 raise ValueError("Password does not meet complexity requirements")
         

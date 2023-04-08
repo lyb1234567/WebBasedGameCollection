@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,Permissi
 # Create your models here.
 
 class GameManger():
-    def create_game(self, gameName, gameRate, gamePrice, gameDiscount, gameAge, gameLabel, gamePublishDate, gameDescription):
+    def create(self, gameName, gameRate, gamePrice, gameDiscount, gameAge, gameLabel, gamePublishDate, gameDescription):
         game = GameModel(
             gameName=gameName,
             gameRate=gameRate,
