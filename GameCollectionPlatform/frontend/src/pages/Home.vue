@@ -25,7 +25,6 @@
             </button>
           </router-link>
         </div>
-        <div class="mb-3 col-sm-3">{{ this.username }}</div>
       </div>
     </form>
   </div>

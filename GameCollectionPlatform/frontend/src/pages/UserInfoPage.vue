@@ -11,8 +11,8 @@
             <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#fileUpoadModal">
               <img v-bind:src="this.profilePic" alt="" class="image-preview" v-if="
                                 this.uploading === false || this.cancelFileUpload === true
-                            " />
-              <img v-bind:src="this.imagePreview" alt="" class="image-preview" style="background-color: transparent"  v-else/>
+                            " @change="checkUpdateUserInfo" />
+              <img v-bind:src="this.imagePreview" alt="" class="image-preview" style="background-color: transparent"  v-else @change="checkUpdateUserInfo"/>
             </button>
           </div>
           <!-- <div class="col-sm-1"></div> -->
@@ -34,7 +34,7 @@
             <div class="row pt-4 mt-4 mb-4">
               <div class="col-sm-12">
                 <textarea class="form-control border-secondary bg-dark text-secondary" rows="4"
-                  placeholder="Short introduction about you" v-model="userInfo" style="height: 100px;"></textarea>
+                  placeholder="Short introduction about you" v-model="userInfo" style="height: 100px;" @change="checkUpdateUserInfo"></textarea>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
         <div class="mb-3 row">
           <div class="mb-3 col-sm-9"></div>
           <div class="mb-3 col-sm-2">
-            <button class="btn btn-outline-success" type="submit" form="myform" @click="updateInfo">
+            <button class="btn btn-outline-success" type="submit" form="myform" @click="updateInfo" v-if="this.updateInfoFlag">
               Update Info
             </button>
           </div>
@@ -149,13 +149,21 @@ export default {
     console.log(this.profilePic)
   },
   methods: {
+    checkUpdateUserInfo(){
+      if(this.userInfo === this.userInfoOg || (this.profilePic === this.uploadedPic))
+      {
+        this.updateInfoFlag = false
+      }
+      else
+      {
+        this.updateInfoFlag = true
+      }
+    },
     updateInfo() {
       console.log("Updaating Profile Pic")
         console.log(this.profilePic)
         console.log(this.uploadedPic)
         console.log(this.userInfo)
-        if(!(this.profilePic === this.uploadedPic))
-        {
           const formData = {
                 username: this.username,
                 profilePic: this.uploadedPic,
@@ -176,8 +184,6 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
-        }
-        
     },
     onDone() {
       this.uploading = true;
@@ -241,6 +247,7 @@ export default {
 
 
             this.userInfo = response.data['userInfo']
+            this.userInfoOg = this.userInfo
             this.userType = response.data['userType']
             this.location = response.data['location']
             console.log(this.profilePic)
@@ -272,12 +279,14 @@ export default {
       uploadedPic: '',
       dateOfBirth: null,
       userInfo: '',
+      userInfoOg: '',
       userType: '',
       location: '',
       uploading: false,
       imagePreview: null,
       fileName: "",
       cancelFileUpload: false,
+      updateInfoFlag: false,
 
 
     };
