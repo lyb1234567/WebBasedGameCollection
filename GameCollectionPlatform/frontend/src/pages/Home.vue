@@ -9,20 +9,14 @@
       <div class="mb-3 row">
         <div class="mb-3 col-sm-4"></div>
         <div class="mb-3 col-sm-3" v-if="this.$store.state.isAuthenticated">
-          <button class="container-fluid btn btn-outline-success disabled">
-            Logged In
-          </button>
+          <button class="container-fluid btn btn-outline-success disabled">Logged In</button>
         </div>
         <div class="mb-3 col-sm-3" v-if="this.$store.state.isAuthenticated">
-          <button class="container-fluid btn btn-outline-danger">
-            Log Out
-          </button>
+          <button class="container-fluid btn btn-outline-danger">Log Out</button>
         </div>
         <div class="mb-3 col-sm-4" v-else>
           <router-link to="/login">
-            <button class="container-fluid btn btn-outline-success">
-              Login
-            </button>
+            <button class="container-fluid btn btn-outline-success">Login</button>
           </router-link>
         </div>
         <div class="mb-3 col-sm-3">{{ this.username }}</div>
@@ -33,61 +27,60 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "HomePage",
+  name: 'HomePage',
   mounted() {
     this.checkAutentication();
   },
   methods: {
     checkAutentication() {
       if (this.$store.state.isAuthenticated) {
-        this.username = localStorage.getItem("username");
+        this.username = localStorage.getItem('username');
         console.log(this.$store.state.isAuthenticated);
-        console.log("Hello Checking Auth " + this.username);
+        console.log('Hello Checking Auth ' + this.username);
       } else {
-        this.username = "";
+        this.username = '';
         console.log(this.$store.state.isAuthenticated);
-        console.log("Hello Checking Auth " + this.username);
+        console.log('Hello Checking Auth ' + this.username);
       }
     },
     logOut() {
       console.log();
       const formData = {
-        token: localStorage.getItem("token"),
+        token: localStorage.getItem('token'),
       };
-      axios.defaults.headers.common["Authorization"] =
-        "Token " + formData.token;
+      axios.defaults.headers.common['Authorization'] = 'Token ' + formData.token;
       axios
-        .post("/api/v1/token/logout", formData)
+        .post('/api/v1/token/logout', formData)
 
-        .then((response) => {
+        .then(response => {
           console.log(response);
           //const token = response.data.auth_token
           //console.log(token)
-          this.$store.commit("removeToken");
+          this.$store.commit('removeToken');
           //axios.defaults.headers.common['Authorization'] = "Token "+token
           //localStorage.setItem('token',token)
           //localStorage.setItem('username',this.username)
           //onsole.log(localStorage.getItem('username'))
-          localStorage.setItem("token", "");
-          this.$router.push("/");
+          localStorage.setItem('token', '');
+          this.$router.push('/');
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
   },
   data() {
     return {
-      message: "Hello",
-      username: "",
+      message: 'Hello',
+      username: '',
     };
   },
 };
 </script>
 
 <style lang="scss">
-@import "../styles/theme.scss";
+@import '../styles/theme.scss';
 </style>
