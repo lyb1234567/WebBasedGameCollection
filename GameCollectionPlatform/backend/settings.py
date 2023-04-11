@@ -169,6 +169,7 @@ WEBPACK_LOADER = {
   }
 }
 
+ACCOUNT_EMAIL_REQUIRED = True
 AUTH_USER_MODEL = 'customUser.User'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
