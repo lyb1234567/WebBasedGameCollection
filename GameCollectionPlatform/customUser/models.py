@@ -2,8 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.conf import settings
-
+import os
 class UserManger(BaseUserManager):
+    print('Test:',settings.MEDIA_ROOT)
     def _create_user(self, username, email, password, firstName, lastName, userType, profilePic, userInfo, dateOfBirth,
                      is_staff,is_superuser , **extra_fields):
         if not username:
@@ -31,21 +32,21 @@ class UserManger(BaseUserManager):
         user.is_active = True
         user.save(using=self._db)
         return user
-
+def user_profile_pic_path(instance, filename):
+    return os.path.join('profilePics', f'user_{instance.pk}', filename)
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     firstName = models.CharField(max_length=30, blank=True, null=True)
     lastName = models.CharField(default='',max_length=30, blank= True, null=True)
     userType = models.CharField(max_length=20,default='Player',blank= True, null=True)
-    profilePic = models.ImageField(upload_to=settings.MEDIA_ROOT+'\profilePics',default=None,blank=True, null=True,max_length=1000,)
+    profilePic = models.ImageField(upload_to='user_profile_pic_path',default=None,blank=True, null=True,max_length=1000,)
     userInfo = models.TextField(default='',max_length=500,blank=True, null=True)
     dateOfBirth = models.DateField(default=None,blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     location = models.CharField(max_length=254,blank=True, null=True) 
-    
     objects = UserManger()
 
     USERNAME_FIELD  = 'username'
