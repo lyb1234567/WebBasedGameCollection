@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from .models import GamePublisher
 from .forms import GamePublisherForm
 from .serializers import GamePublisherSerializer
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 @api_view(['GET', 'POST'])
 def publisher_list(request):
     if request.method == 'GET':
@@ -14,11 +14,15 @@ def publisher_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        form = GamePublisherForm(request.data)
-        if form.is_valid():
-            form.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+        data=request.data
+        files = request.FILES
+        if isinstance(files.get('profilePicture', None), InMemoryUploadedFile):
+            data['profilePicture'] = files['profilePicture']
+        serializer = GamePublisherSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
