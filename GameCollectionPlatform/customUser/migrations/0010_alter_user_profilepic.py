@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 default=None,
                 max_length=1000,
                 null=True,
-                upload_to="C:\\Users\\rawal\\Software Development\\Roberts__Kennedy_and_Lawson\\GameCollectionPlatform\\media\\profilePics",
+                upload_to="C:/Users/rawal/Software Development/Roberts__Kennedy_and_Lawson/GameCollectionPlatform/media/profilePics",
             ),
         ),
     ]

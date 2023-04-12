@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     firstName = models.CharField(max_length=30, blank=True, null=True)
     lastName = models.CharField(default='',max_length=30, blank= True, null=True)
     userType = models.CharField(max_length=20,default='Player',blank= True, null=True)
-    profilePic = models.ImageField(upload_to='user_profile_pic_path',default=None,blank=True, null=True,max_length=1000,)
+    profilePic = models.ImageField(upload_to='media/profilePics',default=None,blank=True, null=True,max_length=1000,)
     userInfo = models.TextField(default='',max_length=500,blank=True, null=True)
     dateOfBirth = models.DateField(default=None,blank=True, null=True)
     is_active = models.BooleanField(default=True)
