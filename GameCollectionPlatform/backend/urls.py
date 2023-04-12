@@ -25,6 +25,7 @@ from Game.views import game_detail
 from Game.views import game_list
 from Collection.views import game_collection_create,game_collection_detail,game_collection_list
 from Review.views import review_create,review_list,review_detail
+from Community.views import community_create,community_detail,community_list
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -43,5 +44,8 @@ urlpatterns = [
     path('api/v1/review/', review_list, name='review_list'),
     path('api/v1/review/create/', review_create, name='review_create'),
     path('api/v1/review/<int:review_code>/', review_detail, name='review_detail'),
+    path('api/v1/community/', community_list, name='community_list'),
+    path('api/v1/community/create/', community_create, name='community_create'),
+    path('api/v1/community/<int:community_code>/', community_detail, name='community_detail'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

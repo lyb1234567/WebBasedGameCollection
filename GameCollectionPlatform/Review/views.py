@@ -19,7 +19,7 @@ def review_create(request):
         publisher=request.data.get('publisher')
         user=request.data.get('user')
         if (int(publisher)>0 and int(user)>0):
-             return JsonResponse({'error': 'A review uploader can either be user or publisher'},
+             return JsonResponse({'error': 'A review uploader can not both user and publisher'},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,11 +34,13 @@ def review_detail(request, review_code):
         serializer = ReviewSerializer(review)
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = ReviewSerializer(review, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        data = request.data
+        for field in data:
+            if hasattr(review, field):
+                setattr(review, field, data[field])
+        review.save()
+        serializer = ReviewSerializer(review)
+        return Response(serializer.data)
     elif request.method == 'DELETE':
         review.delete()
         return Response(status=204)

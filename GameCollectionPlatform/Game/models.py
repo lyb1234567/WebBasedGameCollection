@@ -22,7 +22,7 @@ def game_icon_path(instance, filename):
     return os.path.join('gameIcons', f'user_{instance.pk}', filename)
 class GameModel(models.Model):
     gameCode = models.AutoField(primary_key=True)
-    # pubName = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+    pubName = models.ForeignKey('GamePublisher.GamePublisher', on_delete=models.CASCADE, null=True, blank=True)
     gameName = models.CharField(max_length=255)
     gameRate = models.FloatField()
     gamePrice = models.DecimalField(max_digits=10, decimal_places=2)
