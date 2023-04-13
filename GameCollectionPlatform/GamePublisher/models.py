@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-import re 
+import re
+import os
 class PublisherManager(models.Manager):
     
     def is_password_complex(self,password):
@@ -44,13 +45,14 @@ class PublisherManager(models.Manager):
         publisher.save(using=self._db)
         return publisher
 
-
+def publisher_profile_pic_path(instance, filename):
+    return os.path.join('publisherProfilePics', f'user_{instance.pk}', filename)
 # Create your models here.
 class GamePublisher(models.Model):
     publisherCode = models.AutoField(primary_key=True)
     pubPassword = models.CharField(max_length=255)
     pubEmail = models.EmailField(unique=True)
-    profilePicture = models.ImageField(upload_to='publisher_pictures/', blank=True, null=True)
+    profilePicture = models.ImageField(upload_to='publisher_profile_pic_path',default=None,blank=True, null=True,max_length=1000,)
     publisherDescription = models.TextField()
     publisherInfo = models.TextField()
     objects = PublisherManager()

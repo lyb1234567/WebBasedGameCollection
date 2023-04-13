@@ -7,4 +7,3 @@ class Community(models.Model):
     game = models.ForeignKey(GameModel, on_delete=models.CASCADE)
     gamePublisher = models.ForeignKey(GamePublisher, on_delete=models.CASCADE)
     review = models.ForeignKey('Review.Review', default="no review yet",on_delete=models.CASCADE) 
-    gameName = models.CharField(max_length=255)

@@ -55,7 +55,7 @@ class updateUser(APIView):
                 user_info = request.data['userInfo']
                 date_of_birth = request.data['dateOfBirth']
                 location = request.data.get('location', None)  # This field is optional
-
+                collection=request.data.get('collection')
                 # Create a new user using the UserManager
                 new_user = User.objects.create_user(
                     username=username,
@@ -68,6 +68,7 @@ class updateUser(APIView):
                     userInfo=user_info,
                     dateOfBirth=date_of_birth,
                     location=location,
+                    collection=collection
                 )
                 user_serializer = UserDetailsSerializer(new_user)
                 return Response(user_serializer.data, status=status.HTTP_201_CREATED)

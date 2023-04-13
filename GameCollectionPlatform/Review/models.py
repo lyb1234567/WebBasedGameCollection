@@ -1,9 +1,8 @@
 from django.db import models
 
 class ReviewManager(models.Manager):
-    def create(self, reviewCode, user, publisher, rate, content, status):
+    def create_review(self, user, publisher, rate, content, status):
         review = self.model(
-            reviewCode=reviewCode,
             user=user,
             publisher=publisher,
             rate=rate,
@@ -26,10 +25,14 @@ class ReviewManager(models.Manager):
 
 # Create your models here.
 class Review(models.Model):
-    reviewCode = models.CharField(max_length=50, primary_key=True)
+    STATUS_CHOICES = [
+        ('anonymous', 'Anonymous'),
+        ('public', 'Public'),
+    ]
+    reviewCode = models.AutoField(primary_key=True)
     user = models.ForeignKey("customUser.User", on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey('GamePublisher.GamePublisher', on_delete=models.CASCADE, null=True, blank=True)
     rate = models.IntegerField()
     content = models.TextField()
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='public')
     objects=ReviewManager()

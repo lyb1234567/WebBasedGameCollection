@@ -4,4 +4,4 @@ from .models import GamePublisher
 class GamePublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = GamePublisher
-        fields = ['publisherCode', 'pubEmail', 'profilePicture', 'publisherDescription', 'publisherInfo']
+        fields = '__all__'
