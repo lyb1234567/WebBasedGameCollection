@@ -15,25 +15,18 @@ class updateUser(APIView):
     """
     def put(self, request):
         username = request.data['username']
-        data = User.objects.get(username=username)
-        update_user = UserProfileForm(request.POST,request.FILES, instance=data)
-        update_user.profilePic = request.data['profilePic']
-        update_user.userInfo = request.data['userInfo']
-        # # data.update(profilePic=request.data['profilePic'])
-        # # data.update(userInfo=request.data['userInfo'])
-        print(update_user.profilePic)
-        update_user.save()
-        print(data, request.data,request.FILES)
-        return Response('Saved', status=status.HTTP_200_OK)
-
+        user = get_object_or_404(User, username=username)
+        data=request.data
+        for field in data:
+            if hasattr(user, field):
+                setattr(user, field, data[field])
+        user.save()
+        serializer = UserDetailsSerializer(user)
+        return Response(serializer.data)
     def get(self, request, *args, **kwargs):
-        username = request.query_params.get('username', None)
-        if username is not None:
-            user = get_object_or_404(User, username=username)
-            user_serializer = UserDetailsSerializer(user)
-            return Response(user_serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Username parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        user= User.objects.all()
+        serializer = UserDetailsSerializer(user, many=True)
+        return Response(serializer.data)
     def delete(self, request, *args, **kwargs):
         username = request.data.get('username', None)
         if username is not None:
@@ -55,7 +48,6 @@ class updateUser(APIView):
                 user_info = request.data['userInfo']
                 date_of_birth = request.data['dateOfBirth']
                 location = request.data.get('location', None)  # This field is optional
-                collection=request.data.get('collection')
                 # Create a new user using the UserManager
                 new_user = User.objects.create_user(
                     username=username,
@@ -68,7 +60,6 @@ class updateUser(APIView):
                     userInfo=user_info,
                     dateOfBirth=date_of_birth,
                     location=location,
-                    collection=collection
                 )
                 user_serializer = UserDetailsSerializer(new_user)
                 return Response(user_serializer.data, status=status.HTTP_201_CREATED)

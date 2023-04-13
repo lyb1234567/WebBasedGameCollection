@@ -32,6 +32,7 @@ class GameModel(models.Model):
     gameLabel = models.CharField(max_length=255)
     gamePublishDate = models.DateField(default=timezone.now)
     gameDescription = models.TextField()
+    collection=models.ManyToManyField("Collection.GameCollection")
     gameicon=models.ImageField(upload_to='game_icon_path',default=None,blank=True, null=True,max_length=1000,)
     objects=GameManger()
     

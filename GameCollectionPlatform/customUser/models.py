@@ -53,6 +53,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     location = models.CharField(max_length=254,blank=True, null=True)
     objects = UserManger()
-
     USERNAME_FIELD  = 'username'
     REQUIRED_FIELDS = ['email']

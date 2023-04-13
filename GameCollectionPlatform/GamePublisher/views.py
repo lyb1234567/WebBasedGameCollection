@@ -2,12 +2,12 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import GamePublisher
+from .models import GamePublisher,PublisherManager
 from .forms import GamePublisherForm
 from .serializers import GamePublisherSerializer
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import JsonResponse
-
+from django.core.exceptions import ValidationError
 
 @api_view(['GET'])
 def publisher_list(request):
@@ -38,6 +38,11 @@ def publisher_detail(request, publisher_code):
     elif request.method == 'PUT':
         data = request.data
         for field in data:
+            if field=='pubPassword':
+                manager=PublisherManager()
+                check=manager.is_password_complex(data[field])
+                if not check:
+                     raise ValidationError("Password does not meet complexity requirements")
             if hasattr(publisher, field):
                 setattr(publisher, field, data[field])
         publisher.save()
