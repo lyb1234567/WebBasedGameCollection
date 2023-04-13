@@ -6,29 +6,29 @@ from .models import GameModel
 from .forms import GameForm
 from .serializers import GameSerializers
 from django.core.files.uploadedfile import InMemoryUploadedFile
-@api_view(['GET', 'POST'])
+from django.http import JsonResponse
+@api_view(['GET'])
 def game_list(request):
-    if request.method == 'GET':
-        gamemodel = GameModel.objects.all()
-        serializer = GameSerializers(gamemodel, many=True)
-        return Response(serializer.data)
+    game = GameModel.objects.all()
+    serializer = GameSerializers(game, many=True)
+    return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def game_create(request):
+    if request.method == 'POST':
         data=request.data
         files = request.FILES
-        if isinstance(files.get('gameicon', None), InMemoryUploadedFile):
-            data['gameicon'] = files['gameicon']
-        serializer = GameSerializers(data=data)
+        if isinstance(files.get(' gameicon', None), InMemoryUploadedFile):
+            data[' gameicon'] = files[' gameicon']
+        serializer = GameSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def game_detail(request, pk):
-    game = get_object_or_404(GameModel, pk=pk)
-
+def game_detail(request, game_code):
+    game = get_object_or_404(GameModel, gameCode=game_code)
     if request.method == 'GET':
         serializer = GameSerializers(game)
         return Response(serializer.data)

@@ -30,6 +30,7 @@ def community_detail(request, community_code):
         return Response(serializer.data)
     elif request.method == 'PUT':
         data = request.data
+        print('data:',data)
         for field in data:
             if hasattr(community, field):
                 setattr(community, field, data[field])

@@ -6,14 +6,17 @@ from .models import GamePublisher
 from .forms import GamePublisherForm
 from .serializers import GamePublisherSerializer
 from django.core.files.uploadedfile import InMemoryUploadedFile
-@api_view(['GET', 'POST'])
-def publisher_list(request):
-    if request.method == 'GET':
-        publishers = GamePublisher.objects.all()
-        serializer = GamePublisherSerializer(publishers, many=True)
-        return Response(serializer.data)
+from django.http import JsonResponse
 
-    elif request.method == 'POST':
+
+@api_view(['GET'])
+def publisher_list(request):
+    publisher = GamePublisher.objects.all()
+    serializer = GamePublisherSerializer(publisher, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def publisher_create(request):
         data=request.data
         files = request.FILES
         if isinstance(files.get('profilePicture', None), InMemoryUploadedFile):
@@ -25,14 +28,13 @@ def publisher_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def publisher_detail(request, pk):
-    publisher = get_object_or_404(GamePublisher, pk=pk)
 
+@api_view(['GET', 'PUT', 'DELETE'])
+def publisher_detail(request, publisher_code):
+    publisher = get_object_or_404(GamePublisher, publisherCode=publisher_code)
     if request.method == 'GET':
         serializer = GamePublisherSerializer(publisher)
         return Response(serializer.data)
-
     elif request.method == 'PUT':
         data = request.data
         for field in data:
@@ -41,9 +43,9 @@ def publisher_detail(request, pk):
         publisher.save()
         serializer = GamePublisherSerializer(publisher)
         return Response(serializer.data)
-
-
     elif request.method == 'DELETE':
         publisher.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=204)
+
+
 

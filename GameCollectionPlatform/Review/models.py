@@ -1,7 +1,7 @@
 from django.db import models
 
 class ReviewManager(models.Manager):
-    def create(self, user, publisher, rate, content, status):
+    def create_review(self, user, publisher, rate, content, status):
         review = self.model(
             user=user,
             publisher=publisher,

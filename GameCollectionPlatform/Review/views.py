@@ -9,8 +9,8 @@ from rest_framework import status
 
 @api_view(['GET'])
 def review_list(request):
-    game_collections = Review.objects.all()
-    serializer = ReviewSerializer(game_collections, many=True)
+    review = Review.objects.all()
+    serializer = ReviewSerializer(review, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -18,7 +18,7 @@ def review_create(request):
     if request.method == 'POST':
         publisher=request.data.get('publisher')
         user=request.data.get('user')
-        if (int(publisher)>0 and int(user)>0):
+        if (publisher !=None and user !=None):
              return JsonResponse({'error': 'A review uploader can not both user and publisher'},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = ReviewSerializer(data=request.data)
