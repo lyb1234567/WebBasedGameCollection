@@ -12,7 +12,7 @@ class UserManger(BaseUserManager):
         email = self.normalize_email(email)
         user =  self.model(username=username, email=email, firstName=firstName,lastName=lastName,
                            is_staff=is_staff, is_active=True ,is_superuser=is_superuser,
-                           userType=userType, profilePic=profilePic, userInfo=userInfo,dateOfBirth=dateOfBirth, **extra_fields)
+                           userType=userType, profilePic=profilePic, userInfo=userInfo,dateOfBirth=dateOfBirth,**extra_fields)
         user.set_password(password)
         user.save(using = self._db)
         return user
@@ -24,14 +24,19 @@ class UserManger(BaseUserManager):
                                  **extra_fields)
     
 
-    def create_superuser(self, username, email, password, **extra_fields):
-        user = self._create_user(username, email, password,firstName=username,
-                                 lastName='',userType="Admin", profilePic=None, userInfo="SuperUser", 
-                                 dateOfBirth= timezone.now(), is_superuser=True,is_staff=True,
-                                 **extra_fields)
+    def create_superuser(self, username, email, password, firstName=None,lastName=None, **extra_fields):
+        if firstName is None:
+            firstName = username
+        if lastName is None:
+            lastName= username
+        user = self._create_user(username, email, password, firstName=firstName,
+                                lastName='', userType="Admin", profilePic=None, userInfo="SuperUser",
+                                dateOfBirth=timezone.now(), is_superuser=True, is_staff=True,
+                                **extra_fields)
         user.is_active = True
         user.save(using=self._db)
         return user
+
 def user_profile_pic_path(instance, filename):
     return os.path.join('profilePics', f'user_{instance.pk}', filename)
 class User(AbstractBaseUser, PermissionsMixin):
@@ -46,8 +51,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    location = models.CharField(max_length=254,blank=True, null=True) 
+    location = models.CharField(max_length=254,blank=True, null=True)
     objects = UserManger()
 
     USERNAME_FIELD  = 'username'
-    REQUIRED_FIELDS = ['email','firstName','lastName','profilePic','userInfo','dateOfBirth','userType','location']
+    REQUIRED_FIELDS = ['email']
