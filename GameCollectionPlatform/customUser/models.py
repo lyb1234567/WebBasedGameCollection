@@ -30,7 +30,7 @@ class UserManger(BaseUserManager):
         if lastName is None:
             lastName= username
         user = self._create_user(username, email, password, firstName=firstName,
-                                lastName='', userType="Admin", profilePic=None, userInfo="SuperUser",
+                                lastName=lastName, userType="Admin", profilePic=None, userInfo="SuperUser",
                                 dateOfBirth=timezone.now(), is_superuser=True, is_staff=True,
                                 **extra_fields)
         user.is_active = True
