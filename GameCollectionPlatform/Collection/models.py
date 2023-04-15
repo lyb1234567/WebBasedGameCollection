@@ -24,13 +24,8 @@ class GameCollectionManager(models.Manager):
 # Create your models here.
 class GameCollection(models.Model):
     collectionCode = models.AutoField(primary_key=True)
-<<<<<<< HEAD
-    collectionName = models.CharField(max_length=30,default='Default Collection',unique=True) 
-    game = models.ForeignKey(GameModel, on_delete=models.CASCADE)
-=======
     collectionName = models.CharField(max_length=30,default='Default Collection',unique=True)
     game = models.ManyToManyField(GameModel)
->>>>>>> database
     user = models.ForeignKey("customUser.User", on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey('GamePublisher.GamePublisher', on_delete=models.CASCADE, null=True, blank=True)
     objects = GameCollectionManager()
