@@ -20,8 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from customUser import views as userViews
 from GamePublisher.views import publisher_create,publisher_list,publisher_detail
-from Game.views import game_detail,game_list,game_create
-from Collection.views import game_collection_create,game_collection_detail,game_collection_list
+from Game.views import game_detail,game_list,game_create,game_delete,game_add
+from Collection.views import game_collection_create,game_collection_detail,game_collection_list,game_collection_add,game_collection_delete
 from Review.views import review_create,review_list,review_detail
 from Community.views import community_create,community_detail,community_list
 
@@ -38,8 +38,12 @@ urlpatterns = [
     path('api/v1/game/', game_list, name='game_list'),
     path('api/v1/game/create/', game_create, name='game_create'),
     path('api/v1/game/<int:game_code>/', game_detail, name='game_detail'),
+    path('api/v1/game/<int:collection_code>/add/', game_add, name='game_add'),
+    path('api/v1/game/<int:collection_code>/delete/', game_delete, name='game_delete'),
     path('api/v1/game-collections/', game_collection_list, name='game_collection_list'),
     path('api/v1/game-collections/create/', game_collection_create, name='game_collection_create'),
+    path('api/v1/game-collections/<int:collection_code>/add/', game_collection_add, name='game_collection_add'),
+    path('api/v1/game-collections/<int:collection_code>/delete/', game_collection_delete, name='game_collection_delete'),
     path('api/v1/game-collections/<int:collection_code>/', game_collection_detail, name='game_collection_detail'),
     path('api/v1/review/', review_list, name='review_list'),
     path('api/v1/review/create/', review_create, name='review_create'),

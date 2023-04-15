@@ -32,7 +32,6 @@ def game_detail(request, game_code):
     if request.method == 'GET':
         serializer = GameSerializers(game)
         return Response(serializer.data)
-
     elif request.method == 'PUT':
         data = request.data
         for field in data:
@@ -44,3 +43,32 @@ def game_detail(request, game_code):
     elif request.method == 'DELETE':
         game.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['PUT'])
+def game_add(request, game_code):
+    game = get_object_or_404(GameModel, gameCode=game_code)
+    if request.method == 'PUT':
+        data = request.data
+        for field in data:
+            if field == 'collection':
+                game.collection.add(data[field])
+            else:
+                raise ValueError("You can only add collection in this page")
+        game.save()
+        serializer = GameSerializers(game)
+        return Response(serializer.data)
+
+@api_view(['PUT'])
+def game_delete(request, game_code):
+    game = get_object_or_404(GameModel, gameCode=game_code)
+    if request.method == 'PUT':
+        data = request.data
+        for field in data:
+            if field == 'collection':
+                game.collection.remove(data[field])
+            else:
+                raise ValueError("You can only delete collection in this page")
+        game.save()
+        serializer = GameSerializers(game)
+        return Response(serializer.data)
