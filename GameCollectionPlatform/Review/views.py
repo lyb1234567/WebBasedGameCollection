@@ -3,17 +3,23 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Review
-from .serializers import ReviewSerializer
+from .serializers import ReviewSerializer,ReviewSerializerCreate
 from rest_framework import status
+from rest_framework.permissions import AllowAny 
+from rest_framework.decorators import permission_classes 
 # Create your views here.
 
 @api_view(['GET'])
 def review_list(request):
     review = Review.objects.all()
-    serializer = ReviewSerializer(review, many=True)
+    # for r in review:
+    #     print(r.game)
+    serializer = ReviewSerializer(review, many=True,context={'request':request})
+    # print(serializer.data)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def review_create(request):
     if request.method == 'POST':
         publisher=request.data.get('publisher')
@@ -21,7 +27,7 @@ def review_create(request):
         if (publisher !=None and user !=None):
              return JsonResponse({'error': 'A review uploader can not both user and publisher'},
                                 status=status.HTTP_400_BAD_REQUEST)
-        serializer = ReviewSerializer(data=request.data)
+        serializer = ReviewSerializerCreate(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)

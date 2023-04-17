@@ -32,17 +32,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="row pt-4 mt-4 mb-4">
+                    <div class="col-sm-4" v-if="this.userType ==='Game Publisher'">
+                        <div class="row pt-4 mt-4 mb-2">
                             <div class="col-sm-12">
-                                <textarea class="form-control border-secondary bg-dark text-secondary" rows="4"
+                                <textarea class="form-control border-secondary bg-dark text-secondary" rows="2"
                                     placeholder="Short introduction about you" v-model="userInfo"
-                                    style="height: 100px;"></textarea>
+                                    style="height: 50px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <textarea class="form-control border-secondary bg-dark text-secondary" rows="2"
+                                    placeholder="Short introduction about you" v-model="userDescrtiption"
+                                    style="height: 50px;"></textarea>
                             </div>
                         </div>
                     </div>
+                        <div class="col-sm-4" v-else>
+                            <div class="row pt-4 mt-4 mb-2">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control border-secondary bg-dark text-secondary" rows="4"
+                                        placeholder="Short introduction about you" v-model="userInfo"
+                                        style="height: 100px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 mt-4 pt-4 row">
                     <div class="col-sm-1"></div>
                     <label for="staticEmail" class="col-sm-1 col-form-label border-dark text-secondary">Username</label>
                     <div class="col-sm-9">
@@ -161,7 +177,8 @@ export default {
             firstName: "",
             lastName: "",
             profilePic: initialUpload,
-            userInfo: "",
+            userInfo: "User Information",
+            userDescrtiption : "Publisher Description",
             dateOfBirth: new Date(),
             userType: "Game Player",
             location: "",
@@ -201,8 +218,8 @@ export default {
             var reader = new FileReader();
             reader.readAsDataURL(this.profilePic);
         },
+        
         submitForm() {
-            console.log(this.profilePic);
             const formData = {
                 username: this.username,
                 password: this.password,
@@ -211,10 +228,34 @@ export default {
                 lastName: this.lastName,
                 profilePic: this.profilePic,
                 userInfo: this.userInfo,
+                userDescription : this.userDescrtiption,
                 dateOfBirth: this.dateOfBirth,
                 userType: this.userType,
                 location: "",
             };
+            if(this.userType ==='Game Publisher')
+            {
+            console.log("Making Publisher");          
+            let form_data = new FormData()
+            form_data.append('pubPassword',formData.password)
+            form_data.append('pubEmail',formData.email)
+            form_data.append('profilePicture',formData.profilePic)
+            form_data.append('publisherInfo',formData.userInfo)
+            form_data.append('publisherDescription',formData.userDescription)
+            console.log(form_data)
+            console.log(formData)
+            axios.defaults.headers.common["Authorization"] = "";
+            axios
+                .post("/api/v1/publishers/create/", form_data)
+
+                .then((response) => {
+                    // this.$router.push("/login");
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            }
             let form_data = new FormData()
             console.log(formData.dateOfBirth.toISOString().split('T')[0])
             form_data.append('username',formData.username)
@@ -241,6 +282,7 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
+            setTimeout(this.createCollections(formData),2000)
         },
     },
     components: { Datepicker }

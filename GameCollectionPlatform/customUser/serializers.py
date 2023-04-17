@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from allauth.account.adapter import get_adapter
-from django.conf import settings 
+from backend import settings 
 from .models import User
 from allauth.account.utils import setup_user_email
 

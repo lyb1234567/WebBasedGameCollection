@@ -5,9 +5,13 @@ from rest_framework.response import Response
 from .models import Community
 from .serializers import CommunitySerializer
 from rest_framework import status
+from rest_framework.permissions import AllowAny 
+from rest_framework.decorators import permission_classes 
+
 # Create your views here.
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def community_list(request):
     game_collections = Community.objects.all()
     serializer = CommunitySerializer(game_collections, many=True)
@@ -40,4 +44,17 @@ def community_detail(request, community_code):
     elif request.method == 'DELETE':
         community.delete()
         return Response(status=204)
-
+    
+@api_view(['PUT'])
+def review_add(request, community_code):
+    community = get_object_or_404(Community, communityCode=community_code)
+    if request.method == 'PUT':
+        data = request.data
+        for field in data:
+            if field == 'review':
+                community.review.add(data[field])
+            else:
+                raise ValueError("You can only add review in this page")
+        community.save()
+        serializer = CommunitySerializer(community)
+        return Response(serializer.data)

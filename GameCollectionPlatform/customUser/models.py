@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.conf import settings
 import os
+import requests
 class UserManger(BaseUserManager):
     print('Test:',settings.MEDIA_ROOT)
     def _create_user(self, username, email, password, firstName, lastName, userType, profilePic, userInfo, dateOfBirth,
@@ -54,4 +55,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     location = models.CharField(max_length=254,blank=True, null=True)
     objects = UserManger()
     USERNAME_FIELD  = 'username'
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ['email','firstName','lastName','profilePic','userInfo','dateOfBirth','userType','location']

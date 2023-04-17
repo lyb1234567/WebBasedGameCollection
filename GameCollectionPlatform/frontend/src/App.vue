@@ -114,22 +114,17 @@ export default {
       const formData = {
         token: localStorage.getItem('token'),
       };
-
+      console.log("Logging out ",formData.token)
+      axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
       axios
         .post('/api/v1/token/logout', formData)
 
         .then(response => {
           console.log(response);
-          //const token = response.data.auth_token
-          //console.log(token)
           this.$store.commit('removeToken');
-          //axios.defaults.headers.common['Authorization'] = "Token "+token
-          //localStorage.setItem('token',token)
-          //localStorage.setItem('username',this.username)
-          //onsole.log(localStorage.getItem('username'))
           localStorage.setItem('token', '');
           localStorage.setItem('username', '');
-          // this.$router.push('/')
+          this.$router.push('/')
         })
         .catch(error => {
           console.log(error);

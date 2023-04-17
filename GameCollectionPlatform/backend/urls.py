@@ -23,7 +23,9 @@ from GamePublisher.views import publisher_create,publisher_list,publisher_detail
 from Game.views import game_detail,game_list,game_create,game_delete,game_add
 from Collection.views import game_collection_create,game_collection_detail,game_collection_list,game_collection_add,game_collection_delete
 from Review.views import review_create,review_list,review_detail
-from Community.views import community_create,community_detail,community_list
+from Community.views import community_create,community_detail,community_list,review_add
+from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -32,7 +34,7 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('api/v1/user/update/',userViews.updateUser.as_view()),
-    path('api/v1/publishers/', publisher_list, name='publisher_list'),
+    path('api/v1/publishers/', authentication_classes([])(permission_classes([AllowAny])(publisher_list)), name='publisher_list'),
     path('api/v1/publishers/create/', publisher_create, name='publisher_list'),
     path('api/v1/publishers/<int:publisher_code>/', publisher_detail, name='publisher_detail'),
     path('api/v1/game/', game_list, name='game_list'),
@@ -51,5 +53,6 @@ urlpatterns = [
     path('api/v1/community/', community_list, name='community_list'),
     path('api/v1/community/create/', community_create, name='community_create'),
     path('api/v1/community/<int:community_code>/', community_detail, name='community_detail'),
+    path('api/v1/community/<int:community_code>/add/', review_add, name='review_add'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

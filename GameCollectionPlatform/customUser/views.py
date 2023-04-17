@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserDetailsSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import AllowAny 
+from rest_framework.decorators import permission_classes 
 # Create your views here.
 class updateUser(APIView):
     """
@@ -13,6 +15,7 @@ class updateUser(APIView):
     - Assign celery task to Seperate Audio
     - Return celery task_id in response
     """
+    print("inside")
     def put(self, request):
         username = request.data['username']
         user = get_object_or_404(User, username=username)
@@ -21,11 +24,12 @@ class updateUser(APIView):
             if hasattr(user, field):
                 setattr(user, field, data[field])
         user.save()
-        serializer = UserDetailsSerializer(user)
+        serializer = UserDetailsSerializer(user,context={'request':request})
         return Response(serializer.data)
+    @permission_classes([AllowAny])
     def get(self, request, *args, **kwargs):
         user= User.objects.all()
-        serializer = UserDetailsSerializer(user, many=True)
+        serializer = UserDetailsSerializer(user, many=True,context={'request':request})
         return Response(serializer.data)
     def delete(self, request, *args, **kwargs):
         username = request.data.get('username', None)
@@ -36,19 +40,21 @@ class updateUser(APIView):
         else:
             return Response({'error': 'Username parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
     def post(self,request):
+        print("INSIDE ")
         user_form = UserProfileForm(request.POST, request.FILES)
         if user_form.is_valid():
                 username = request.data['username']
-                email = request.data['email']
-                password = request.data['password']
-                first_name = request.data['firstName']
-                last_name = request.data['lastName']
-                user_type = request.data['userType']
+                email = request.data.get('password',None)
+                password = request.data.get('password',None)
+                first_name = request.data.get('firstName',None)
+                last_name = request.data.get('lastName',None)
+                user_type = request.data.get('userType',None)
                 profile_pic = request.data['profilePic']
                 user_info = request.data['userInfo']
-                date_of_birth = request.data['dateOfBirth']
+                date_of_birth = request.data.get('dateOfBirth',None)
                 location = request.data.get('location', None)  # This field is optional
                 # Create a new user using the UserManager
+                print(request)
                 new_user = User.objects.create_user(
                     username=username,
                     email=email,
@@ -61,7 +67,7 @@ class updateUser(APIView):
                     dateOfBirth=date_of_birth,
                     location=location,
                 )
-                user_serializer = UserDetailsSerializer(new_user)
+                user_serializer = UserDetailsSerializer(new_user,context={'request':request})
                 return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
         else:

@@ -8,14 +8,19 @@ from .serializers import GamePublisherSerializer
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
+from rest_framework.permissions import AllowAny 
+from rest_framework.decorators import permission_classes 
+
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def publisher_list(request):
     publisher = GamePublisher.objects.all()
     serializer = GamePublisherSerializer(publisher, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def publisher_create(request):
         data=request.data
         files = request.FILES
@@ -30,6 +35,7 @@ def publisher_create(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
 def publisher_detail(request, publisher_code):
     publisher = get_object_or_404(GamePublisher, publisherCode=publisher_code)
     if request.method == 'GET':

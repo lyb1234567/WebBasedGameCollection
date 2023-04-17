@@ -1,10 +1,11 @@
 from django.db import models
-
+from Game.models import GameModel
 class ReviewManager(models.Manager):
-    def create_review(self, user, publisher, rate, content, status):
+    def create_review(self, user, publisher,game, rate, content, status):
         review = self.model(
             user=user,
             publisher=publisher,
+            game=game,
             rate=rate,
             content=content,
             status=status,
@@ -32,6 +33,7 @@ class Review(models.Model):
     reviewCode = models.AutoField(primary_key=True)
     user = models.ForeignKey("customUser.User", on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey('GamePublisher.GamePublisher', on_delete=models.CASCADE, null=True, blank=True)
+    game = models.ForeignKey("Game.GameModel", on_delete=models.CASCADE,blank=True)
     rate = models.IntegerField()
     content = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='public')

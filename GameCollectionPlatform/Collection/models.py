@@ -25,7 +25,7 @@ class GameCollectionManager(models.Manager):
 class GameCollection(models.Model):
     collectionCode = models.AutoField(primary_key=True)
     collectionName = models.CharField(max_length=30,default='Default Collection',unique=True)
-    game = models.ManyToManyField(GameModel)
+    game = models.ManyToManyField(GameModel,blank=True)
     user = models.ForeignKey("customUser.User", on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey('GamePublisher.GamePublisher', on_delete=models.CASCADE, null=True, blank=True)
     objects = GameCollectionManager()

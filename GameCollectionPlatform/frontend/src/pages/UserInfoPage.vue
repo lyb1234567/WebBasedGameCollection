@@ -1,5 +1,5 @@
 <template >
-  <div class="col-sm-12">
+  <div class="col-sm-12" v-if="this.userType === 'Game Publisher'">
     <div class="mb-3 row">
       <h1 class="text-center text-secondary">User Information</h1>
     </div>
@@ -10,9 +10,120 @@
           <div class="col-sm-2">
             <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#fileUpoadModal">
               <img v-bind:src="this.profilePic" alt="" class="image-preview" v-if="
-                                this.uploading === false || this.cancelFileUpload === true
-                            " @change="checkUpdateUserInfo" />
-              <img v-bind:src="this.imagePreview" alt="" class="image-preview" style="background-color: transparent"  v-else @change="checkUpdateUserInfo"/>
+                this.uploading === false || this.cancelFileUpload === true
+              " @change="checkUpdateUserInfo" />
+              <img v-bind:src="this.imagePreview" alt="" class="image-preview" style="background-color: transparent"
+                v-else @change="checkUpdateUserInfo" />
+            </button>
+          </div>
+          <!-- <div class="col-sm-1"></div> -->
+          <div class="col-sm-4">
+            <div class="row pt-4 mt-4 mb-4">
+              <div class="col-sm-12">
+                <input type="text" class="form-control border-secondary bg-dark text-secondary" id="firstName"
+                  placeholder="First Name" v-model="firstName" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <input type="text" class="form-control border-secondary bg-dark text-secondary" id="lastName"
+                  placeholder="Last Name" v-model="lastName" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row pt-4 mt-4 mb-4">
+              <div class="col-sm-12">
+                <textarea class="form-control border-secondary bg-dark text-secondary" rows="2"
+                  placeholder="Short introduction about you" v-model="userInfo" style="height: 50px;"
+                  @change="checkUpdateUserInfo"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <textarea class="form-control border-secondary bg-dark text-secondary" rows="2"
+                  placeholder="Short introduction about you" v-model="pubDesc" style="height: 50px;" disabled></textarea>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <div class="col-sm-1"></div>
+          <label for="staticEmail" class="col-sm-1 col-form-label border-dark text-secondary">Username</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control border-secondary bg-dark text-secondary" id="username"
+              placeholder="This will be visible to all players" v-model="username" disabled />
+          </div>
+          <!-- <div class="col-sm-1"></div> -->
+          <label for="staticEmail" class="col-sm-1 col-form-label text-secondary">Email</label>
+          <div class="col-sm-4">
+            <input type="email" class="form-control border-secondary bg-dark text-secondary" id="email"
+              placeholder="name@example.com" v-model="email" disabled />
+          </div>
+        </div>
+        <div class="mb-3 row">
+
+        </div>
+        <div class="mb-3 row">
+          <div class="col-sm-1"></div>
+          <label for="inputPassword" class="col-sm-1 col-form-label text-secondary">Birthday</label>
+          <div class="col-sm-4 pt-2">
+            <input v-model="dateOfBirth" class="form-control border-secondary bg-dark text-secondary" disabled />
+          </div>
+          <div class="col-sm-1 col-form-label text-secondary">
+            You are a
+          </div>
+          <div class="btn-group col-sm-4" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="Game Player"
+              v-model="this.userType" v-if="this.userType === 'Game Player'" diabled>
+            <label class="btn btn-outline-primary col-sm-2 mt-2" for="btnradio1"
+              v-if="this.userType === 'Game Player'">Game
+              Player</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" value="Game Publisher"
+              v-model="this.userType" v-if="this.userType === 'Game Publisher'" diabled>
+            <label class="btn btn-outline-primary col-sm-2 mt-2" for="btnradio2"
+              v-if="this.userType === 'Game Publisher'">Game Publisher</label>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" value="Game Publisher"
+              v-model="this.userType" v-if="this.userType === 'Admin'" diabled>
+            <label class="btn btn-outline-primary col-sm-2 mt-2" for="btnradio2"
+              v-if="this.userType === 'Admin'">Admin</label>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <div class="mb-3 col-sm-7"></div>
+          <div class="mb-3 col-sm-2">
+            <button class="btn btn-outline-success" type="submit" form="myform" @click="updateInfo"
+              v-if="this.updateInfoFlag">
+              Update Info
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-outline-success" type="submit" form="myform" @click="$router.push('/addCollection')">
+              Add Game
+            </button>
+          </div>
+          
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-sm-12" v-else>
+    <div class="mb-3 row">
+      <h1 class="text-center text-secondary">User Information</h1>
+    </div>
+    <form @submit.prevent="submitForm" id="myform">
+      <div class="container-fluid row mx-auto col-12 col-md-10 col-lg-8" id="App">
+        <div class="container-fluid mb-3 row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#fileUpoadModal">
+              <img v-bind:src="this.profilePic" alt="" class="image-preview" v-if="
+                this.uploading === false || this.cancelFileUpload === true
+              " @change="checkUpdateUserInfo" />
+              <img v-bind:src="this.imagePreview" alt="" class="image-preview" style="background-color: transparent"
+                v-else @change="checkUpdateUserInfo" />
             </button>
           </div>
           <!-- <div class="col-sm-1"></div> -->
@@ -34,7 +145,8 @@
             <div class="row pt-4 mt-4 mb-4">
               <div class="col-sm-12">
                 <textarea class="form-control border-secondary bg-dark text-secondary" rows="4"
-                  placeholder="Short introduction about you" v-model="userInfo" style="height: 100px;" @change="checkUpdateUserInfo"></textarea>
+                  placeholder="Short introduction about you" v-model="userInfo" style="height: 100px;"
+                  @change="checkUpdateUserInfo"></textarea>
               </div>
             </div>
           </div>
@@ -85,7 +197,8 @@
         <div class="mb-3 row">
           <div class="mb-3 col-sm-9"></div>
           <div class="mb-3 col-sm-2">
-            <button class="btn btn-outline-success" type="submit" form="myform" @click="updateInfo" v-if="this.updateInfoFlag">
+            <button class="btn btn-outline-success" type="submit" form="myform" @click="updateInfo"
+              v-if="this.updateInfoFlag">
               Update Info
             </button>
           </div>
@@ -145,45 +258,48 @@ import axios from 'axios'
 export default {
   name: "UserInfoPage",
   mounted() {
-    this.fetchUserInfo();
-    console.log(this.profilePic)
+    this.fetchUserInfo()
   },
   methods: {
-    checkUpdateUserInfo(){
-      if(this.userInfo === this.userInfoOg || (this.profilePic === this.uploadedPic))
-      {
-        this.updateInfoFlag = false
-      }
-      else
-      {
+    checkUpdateUserInfo() {
+      if (this.userInfo != this.userInfoOg || (this.profilePic != this.uploadedPic) || this.pubDescOg != this.pubDesc) {
         this.updateInfoFlag = true
+      }
+      else {
+        this.updateInfoFlag = false
       }
     },
     updateInfo() {
       console.log("Updaating Profile Pic")
-        console.log(this.profilePic)
-        console.log(this.uploadedPic)
-        console.log(this.userInfo)
-          const formData = {
-                username: this.username,
-                profilePic: this.uploadedPic,
-                userInfo: this.userInfo,
-            };
-            let form_data = new FormData()
-            form_data.append('username',formData.username)
-            form_data.append('profilePic',formData.profilePic)
-            form_data.append('userInfo',formData.userInfo)
-            console.log(form_data)
-            console.log(formData)
-            axios
-                .post("/api/v1/user/update/", form_data)
+      console.log(this.profilePic)
+      console.log(this.uploadedPic)
+      console.log(this.userInfo)
+      console.log(this.profilePic)
+      console.log(this.email)
+      console.log(this.username)
+      console.log(this.pubDesc)
+      const formData = {
+        username: this.username,
+        profilePic: this.uploadedPic,
+        email: this.email,
+        userInfo: this.userInfo,
+      };
+      let form_data = new FormData()
+      form_data.append('username', formData.username)
+      form_data.append('profilePic', formData.profilePic)
+      form_data.append('userInfo', formData.userInfo)
+      form_data.append('email', formData.email)
+      console.log(form_data)
+      console.log(formData)
+      axios
+        .post("/api/v1/user/update/", form_data)
 
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     onDone() {
       this.uploading = true;
@@ -226,11 +342,12 @@ export default {
     fetchUserInfo() {
       if (this.$store.state.isAuthenticated) {
         console.log("Fetching data  ")
-        
+        axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
         axios
           .get('/api/v1/users/me')
 
           .then(response => {
+            localStorage.setItem('userid',parseInt(response.data['id']))
             this.username = response.data['username']
             this.firstName = response.data['firstName']
             this.lastName = response.data['lastName']
@@ -240,8 +357,9 @@ export default {
               console.log("No DP")
               this.profilePic = "../components/logos/initialUpload.png"
             }
+            console.log(this.profilePic)
             this.uploadedPic = this.profilePic
-            this.imagePreview=this.profilePic
+            this.imagePreview = this.profilePic
             this.dateOfBirth = new Date(response.data['dateOfBirth'])
             this.formatDate()
 
@@ -249,23 +367,49 @@ export default {
             this.userInfo = response.data['userInfo']
             this.userInfoOg = this.userInfo
             this.userType = response.data['userType']
+            localStorage.setItem('userType',this.userType)
             this.location = response.data['location']
-            console.log(this.profilePic)
+            if (response.data['userType'] === 'Game Publisher') {
+              axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
+              axios
+                .get('api/v1/publishers/')
+                .then(response => {
+                  for (var i = 0; i < response.data.length; i++) {
+                    if (this.email === response.data[i]['pubEmail']) {
+                      this.pubCode = response.data[i]['publisherCode']
+                      break
+                    }
+                  }
+                  console.log(this.pubCode)
+                  axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
+                  axios.get('api/v1/publishers/' + String(this.pubCode))
+                    .then(response => {
+                      console.log(response.data)
+                      this.pubDesc = response.data['publisherDescription']
+                      this.pubDescOg = this.pubDesc
+                    })
+                    .catch(error => {
+                      console.log(error)
+                    })
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+            }
 
           })
           .catch(error => {
             console.log(error)
           })
-        //   this.username = localStorage.getItem('username')
-        //   console.log(this.$store.state.isAuthenticated)
-        //   console.log("Hello Checking Auth "+this.username)
-        //   console.log("Auth Token : "+axios.defaults.headers.common['Authorization'])
+
       }
+
       else {
         this.username = ''
         console.log(this.$store.state.isAuthenticated)
         console.log("Hello Checking Auth " + this.username)
       }
+      console.log("USer Tupe " + this.userType)
 
     },
   },
@@ -287,7 +431,9 @@ export default {
       fileName: "",
       cancelFileUpload: false,
       updateInfoFlag: false,
-
+      pubCode: 0,
+      pubDesc: '',
+      pubDescOg: '',
 
     };
   }

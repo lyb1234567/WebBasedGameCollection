@@ -7,13 +7,18 @@ from .forms import GameForm
 from .serializers import GameSerializers
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import JsonResponse
+from rest_framework.permissions import AllowAny 
+from rest_framework.decorators import permission_classes 
+
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def game_list(request):
     game = GameModel.objects.all()
-    serializer = GameSerializers(game, many=True)
+    serializer = GameSerializers(game, many=True,context={'request':request})
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def game_create(request):
     if request.method == 'POST':
         data=request.data
@@ -30,7 +35,7 @@ def game_create(request):
 def game_detail(request, game_code):
     game = get_object_or_404(GameModel, gameCode=game_code)
     if request.method == 'GET':
-        serializer = GameSerializers(game)
+        serializer = GameSerializers(game, context={'request':request})
         return Response(serializer.data)
     elif request.method == 'PUT':
         data = request.data
