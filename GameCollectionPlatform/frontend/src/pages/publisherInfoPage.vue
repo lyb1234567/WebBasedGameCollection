@@ -303,7 +303,7 @@ export default {
       if(this.$store.state.isAuthenticated === true)
       {
         localStorage.setItem('gameCode',JSON.stringify(game))
-        this.$router.push("/introducepage");
+        this.$router.push("/communityPage");
       }
       else{
         this.$router.push("/login");

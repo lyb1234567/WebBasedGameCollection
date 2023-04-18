@@ -20,6 +20,9 @@ export default createStore({
     userType : 'Game Player',
     loggedPubliserInfo : null,
     gamePrice: 0,
+    userCollection : null,
+    userGames: null,
+    buyGame: 0,
   },
   mutations: {
     initializedStore(state) {

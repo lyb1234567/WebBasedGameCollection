@@ -94,59 +94,38 @@
                   fill="white" />
               </svg>
             </div>
-            <div class="dailog-box">
-              <div class="tit">Big news</div>
-              <div class="time-box">-UpcomingGame-</div>
-              <div class="item-box1">
-                <div class="item-left" @click="$router.push('/communityPage')">
-                  <div class="img-box"><img src="../assets/images/m1.png" alt="" /></div>
-                  <div class="left-txt">
-                    <div class="txt-tit">Minecraft</div>
-                    <div class="txt-sub-tit">Ps5 & xbox & PC</div>
-                    <div class="txt-time">05/05/2023</div>
-                  </div>
+            <div class="dailog-box" v-if="this.$store.state.isAuthenticated === true">
+              <div class="tit" >Your Game Collection</div>
+              <div class="container-fluid" v-for="game in this.userGames[0]" v-bind:key="game">
+                <div class="item-p">
+                  <p class="text-secondary">
+                    {{ game.gameName }}
+                  </p>
                 </div>
-                <div class="item-right">
-                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M8.45462 3.99594L7.30848 3.99357C4.69408 3.98726 2.42446 6.13136 2.40648 8.72842L2.40648 11.7193C2.40648 12.3427 2.32829 12.9511 1.99133 13.4696L1.76695 13.8152C1.42529 14.3392 1.79275 15.0415 2.40648 15.0415H13.3754C13.9891 15.0415 14.3558 14.3392 14.0149 13.8152L13.7905 13.4696C13.4543 12.9511 13.3754 12.3419 13.3754 11.7185V8.72921C13.3441 6.13136 11.069 4.00226 8.45462 3.99594V3.99594Z"
-                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                      d="M10.2364 15.0415C10.2364 15.6694 9.98927 16.2716 9.54941 16.7156C9.10955 17.1595 8.51298 17.409 7.89093 17.409C7.26887 17.409 6.6723 17.1595 6.23244 16.7156C5.79258 16.2716 5.54547 15.6694 5.54547 15.0415"
-                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                      d="M7.89091 1.62616C8.30561 1.62616 8.70333 1.79244 8.99656 2.08843C9.2898 2.38441 9.45454 2.78585 9.45454 3.20444V3.99358H6.32727V3.20444C6.32727 2.78585 6.49201 2.38441 6.78525 2.08843C7.07849 1.79244 7.4762 1.62616 7.89091 1.62616Z"
-                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
+                <di class="item">
+                <div class="con-img" >
+                  <img v-bind:src="game.gameicon" alt="" @click="this.checkLoginAndRedirect(game)"/>
                 </div>
-              </div>
-              <div class="time-box">-Today-</div>
-              <div class="item-box2" @click="$router.push('/communityPage')">
-                <div class="item2-top">
-                  <div class="txt-tit">
-                    <h1>Martin Goutry</h1>
-                    <h4>Back-end developer</h4>
-                  </div>
-
-                  <div class="item2-img">
-                    <img src="../assets/images/m2.png" alt="" />
-                  </div>
+                <div class="item-p">
+                  <p class="text-primary">${{ game.gamePrice }}</p>
+                  <div class="item-sub text-primary">Brand new</div>
                 </div>
-                <p>
-                  New Starriebun Skin! We have a new partner skin live in the shop now! Join the
-                  Starrie cult and watch the stars align 💫 Also includes the "STARRIE CULT" title!!
-                  >>
-                </p>
+              </di>
+              <br>
               </div>
-              <div class="time-box">-Yesterday-</div>
-              <div class="item-box3" @click="$router.push('/communityPage')">
-                <img src="../assets/images/m3.png" alt="" />
-              </div>
-              <div class="time-box">-28/02/2023-</div>
             </div>
+            <div class="dailog-box" v-else>
+              <div class="tit text-primary">Please Login to see your Collection</div>
+              <br>
+              <br>
+              <div class="container-fluid row mb-3">
+                <button class="container-fluid btn btn-outline-primary" @click="$router.push('/login')">Login</button>
+              </div>
+            </div>
+
           </div>
           <div v-if="this.$store.state.isAuthenticated === true">
-            <img v-bind:src="this.profilePic" alt="" />
+            <img v-bind:src="this.profilePic" alt="" @click="this.$router.push('/userInfo')"/>
           </div>
           <div v-else>
             <img v-bind:src="this.profilePic" alt="" />
@@ -164,65 +143,6 @@
             <div class="item-tit">{{game.gameName}}</div>
             <div class="item-money">${{game.gamePrice}}</div>
           </div>
-          <!-- <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m5.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m5.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m6.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m7.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-        </div>
-        <div class="box-tit">Discount Collections</div>
-        <div class="con-item-box">
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m5.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m6.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div>
-          <div class="con-item" @click="$router.push('/introducepage')">
-            <div class="con-img">
-              <img src="../assets/images/m7.png" alt="" />
-            </div>
-            <div class="sub">Base Game</div>
-            <div class="item-tit">Grand Theft Auto V: Premium Edition</div>
-            <div class="item-money">$29.99</div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -233,24 +153,70 @@
 <script>
 
 import axios from 'axios'
+import defaultImage from "../pages/image/default.png";
 export default {
-  mounted() {
-    this.checkAutentication();
+  async mounted() {
+    await this.checkAutentication();
     console.log(this.profilePic)
-    this.fetchGames();
+    await this.fetchGames();
     this.image = JSON.parse(localStorage.getItem('games'))[0]['gameicon']
     this.games = JSON.parse(localStorage.getItem('games'))
     console.log(JSON.parse(localStorage.getItem('games')))
+    await this.fetchUserCollection()
+    this.userCollection.push(JSON.parse(localStorage.getItem('userCollection')))
+    console.log(this.userCollection)
+    await this.fetchUserGames()
+    this.userGames.push(JSON.parse(localStorage.getItem('userGames')))
+    console.log(this.userGames)
   },
   data() {
     return {
       username: '',
-      profilePic: localStorage.getItem('profilePic'),
+      profilePic: defaultImage,
       image : null,
       games: null,
+      userCollection: [],
+      userGames : [],
     };
   },
   methods: {
+    async fetchUserGames() {
+      var gamesData = []
+        for(var i=0; i<this.userCollection[0]['game'].length;i++)
+        {
+          var gameid = this.userCollection[0]['game'][i]
+          axios.defaults.headers.common['Authorization'] = "Token "+ localStorage.getItem('token');
+          await axios.get('api/v1/game/'+String(gameid))
+            .then(response => {
+              gamesData.push(response.data)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+        localStorage.setItem('userGames',JSON.stringify(gamesData))
+    },
+    async fetchUserCollection() {
+      var collections = null
+      axios.defaults.headers.common['Authorization'] = "";
+      await axios.get('api/v1/game-collections/')
+        .then(response => {
+          collections = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        var userid = localStorage.getItem('userid')
+        console.log(userid,collections)
+        for(var i = 0; i < collections.length;i++)
+        {
+          if(userid == collections[i]['user'])
+          {
+            localStorage.setItem('userCollection',JSON.stringify(collections[i]))
+            break
+          }
+        }
+    },
     checkLoginAndRedirect(game) {
       console.log(game)
       localStorage.setItem('gameCode',JSON.stringify(game))
@@ -267,15 +233,17 @@ export default {
           console.log(error)
         })
     },
-    checkAutentication() {
+    async checkAutentication() {
       if (this.$store.state.isAuthenticated) {
         this.username = localStorage.getItem('username');
         console.log(this.$store.state.isAuthenticated);
         console.log('Hello Checking Auth ' + this.username);
+        this.profilePic = localStorage.getItem('profilePic')
       } else {
         this.username = '';
         console.log(this.$store.state.isAuthenticated);
         console.log('Hello Checking Auth ' + this.username);
+        this.profilePic = defaultImage  
       }
     },
   }

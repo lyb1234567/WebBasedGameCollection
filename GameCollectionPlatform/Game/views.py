@@ -32,6 +32,7 @@ def game_create(request):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
 def game_detail(request, game_code):
     game = get_object_or_404(GameModel, gameCode=game_code)
     if request.method == 'GET':

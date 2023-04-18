@@ -290,9 +290,10 @@ export default {
     console.log(typeof this.games)
     await this.fetchReviews()
     this.reviews = JSON.parse(localStorage.getItem('gameReviews'))
+
     console.log(this.collection,this.games)
     this.userType = localStorage.getItem('userType')
-    console.log(this.userType)
+    console.log(this.userType,this.reviews[0].user.profilePic)
   },
   data() {
     return {
@@ -300,7 +301,7 @@ export default {
       games: [],
       community: [],
       publisher: [],
-      reviews: [],
+      reviews: '',
       reviewUsers: [],
       reviewContent: '',
       reviewRating: 0,
@@ -311,6 +312,8 @@ export default {
   methods: {
     async storePriceAndRedirect(price) {
       localStorage.setItem('gamePrice',price)
+      localStorage.setItem('buyGame',game.gameCode)
+      console.log(game.gameCode)
       this.$router.push('/paymentPage')
     },
     async submitReview() {
@@ -318,12 +321,15 @@ export default {
       console.log(usertype)
       console.log(game.gameCode)
       if (usertype === 'Game Publisher') {
-        var loggedPublisher = localStorage.getItem('loggedPubliserInfo')
+        console.log('Inside')
+        var userid1 = localStorage.getItem('userid')
+        var loggedPublisher = community.gamePublisher
         const formData = {
           rate: this.reviewRating,
           content: this.reviewContent,
           status: this.reviewStatus,
-          publisher: loggedPublisher.publisherCode,
+          publisher: loggedPublisher,
+          user: userid1,
           game: game.gameCode,
         };
         let form_data = new FormData()
@@ -332,13 +338,14 @@ export default {
         form_data.append('status', formData.status)
         form_data.append('game', formData.game)
         form_data.append('publisher', formData.publisher)
+        form_data.append('user', formData.user)
         console.log(this.reviewStatus)
         axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
         await axios
           .post("/api/v1/review/create/", form_data)
 
           .then((response) => {
-            this.$router.push("/communityPage");
+            // this.$router.push("/communityPage");
             // this.fetchReviews()
             console.log(response.data);
           })
@@ -386,14 +393,32 @@ export default {
         .catch(error => {
           console.log(error)
         })
+        
       if (reviews.length > 0) {
         console.log(reviews[0])
+        var displayList = []
+        var displayObject = {
+          content : '',
+          rate :  '',
+          status: '',
+          username: '',
+          profilePic: '',
+        }
         for (var i = 0; i < reviews.length; i++) {
           if (reviews[i]['game']['gameCode'] == this.games[0]['gameCode']) {
             gameReview.push(reviews[i])
+            displayObject.content=reviews[i].content
+          displayObject.rate=reviews[i].rate
+          displayObject.status=reviews[i].status
+          // console.log(reviews[i].user)
+          displayObject.username=reviews[i]['user'].username
+          displayObject.profilePic=reviews[i].user.profilePic
+          displayList.push(displayObject)
           }
         }
         localStorage.setItem('gameReviews', JSON.stringify(gameReview))
+        console.log(gameReview)
+        console.log("Display ",displayList)
       }
     },
     async fetchPublisherInfo() {

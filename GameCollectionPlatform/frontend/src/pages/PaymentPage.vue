@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="col-12 row">
-                    <button class="btn btn-outline-primary mb-3 ">
+                    <button class="btn btn-outline-primary mb-3 " @click="this.addToCollection()">
                         Pay ${{this.gamePrice}}
                     </button>
                 </div>
@@ -90,16 +90,62 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   mounted(){
     this.gamePrice=localStorage.getItem('gamePrice')
+    this.gameCode=localStorage.getItem('buyGame')
   },
   data() {
     return {
       creditCardNumber: '',
       gamePrice: 0,
+      collectionCode: 0,
     }
   },
+  methods:{ 
+    async addToCollection() {
+      var collectionCode = 0
+      var userid = parseInt(localStorage.getItem('userid'))
+      await axios
+                    .get("/api/v1/game-collections/")
+                    .then((response) => {
+                      console.log(response,userid)
+                      for( var i=0;i<response.data.length;i++)
+                      {
+                        // console.log(response.data[i]['publisher'], this.pubCode)
+                        if(userid===response.data[i]['user'])
+                        {
+                          // found = true
+                          this.collectionCode = response.data[i]['collectionCode']
+                          collectionCode = this.collectionCode
+                          break
+                        }
+                          
+                      }
+                        
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                    console.log(collectionCode)
+                    axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
+            let form_data1 = new FormData()
+            console.log(this.gameCode)
+            form_data1.append('game',this.gameCode)
+            await axios
+                .put("/api/v1/game-collections/"+collectionCode+"/add/ ", form_data1)
+
+                .then((response) => {
+                    this.$router.push("/");
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+    },
+
+  },          
   watch: {
     creditCardNumber() {
       // Card number without dash (-)

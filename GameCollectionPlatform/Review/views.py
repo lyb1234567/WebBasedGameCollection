@@ -24,9 +24,9 @@ def review_create(request):
     if request.method == 'POST':
         publisher=request.data.get('publisher')
         user=request.data.get('user')
-        if (publisher !=None and user !=None):
-             return JsonResponse({'error': 'A review uploader can not both user and publisher'},
-                                status=status.HTTP_400_BAD_REQUEST)
+        # if (publisher !=None and user !=None):
+        #      return JsonResponse({'error': 'A review uploader can not both user and publisher'},
+        #                         status=status.HTTP_400_BAD_REQUEST)
         serializer = ReviewSerializerCreate(data=request.data)
         if serializer.is_valid():
             serializer.save()

@@ -353,6 +353,7 @@ export default {
             this.lastName = response.data['lastName']
             this.email = response.data['email']
             this.profilePic = response.data['profilePic']
+            localStorage.setItem('profilePic',this.profilePic)
             if (null === this.profilePic) {
               console.log("No DP")
               this.profilePic = "../components/logos/initialUpload.png"

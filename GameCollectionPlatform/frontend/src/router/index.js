@@ -51,6 +51,14 @@ const routes = [
     },
   },
   {
+    path: '/logout',
+    name: 'LogOut',
+    component: HomePage,
+    meta: {
+      title: 'Board Game Saga | Your Info',
+    },
+  },
+  {
     path: '/communityPage',
     name: 'communityPage',
     component: communityPage,

@@ -124,6 +124,7 @@ export default {
           this.$store.commit('removeToken');
           localStorage.setItem('token', '');
           localStorage.setItem('username', '');
+          location.reload()
           this.$router.push('/')
         })
         .catch(error => {
