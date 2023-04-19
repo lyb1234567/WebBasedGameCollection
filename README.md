@@ -21,4 +21,4 @@ Now we need to use the second terminal to open front end pages. Go to the path G
 
 "npm run serve"
 
-Wait for a few moments, then open the browser with url localhost:8080. You can see the homepage of our front end page. As for the rest of our functions, you may refer to our product prototype file on wiki, which contains detailed instructions and pictures about functions of our product.
+Wait for a few moments, then open the browser with url localhost:8080. You can see the homepage of our front end page. As for the rest of our functions, you may refer to our product prototype file on wiki, which contains detailed instructions and pictures about functions of our product. Wish you enjoy our projects.
